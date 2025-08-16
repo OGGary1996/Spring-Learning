@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  补充需要注入到UserServiceImpl的UserDAO的bean配置  -->
+    <bean id="userDAO" class="com.kezhang.dao.UserDAO"/>
+
+    <!-- 创建主Bean: UserServiceImpl 的Bean -->
+    <bean id="userServiceImpl" class="com.kezhang.service.impl.UserServiceImpl">
+        <!-- 配置注入信息 -->
+        <!-- name表示UserServiceImpl中的被注入的字段，ref表示被注入的bean的源名称(id) -->
+        <property name="userDAO" ref="userDAO"/>
+    </bean>
+
+</beans>

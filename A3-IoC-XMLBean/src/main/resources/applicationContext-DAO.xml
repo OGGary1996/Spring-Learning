@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  UserDAO  -->
+    <bean id="userDAO" class="com.kezhang.dao.UserDAO" name="dao1"
+          scope="singleton" lazy-init="false" init-method="initUserDAO" destroy-method="destroyUserDAO">
+        <!-- 注入druidDataSource -->
+        <property name="dataSource" ref="druidDataSource" />
+    </bean>
+    <!--  Druid  -->
+    <bean id="druidDataSource" scope="prototype" lazy-init="true" class="com.alibaba.druid.pool.DruidDataSource" >
+        <!-- 基本连接信息 -->
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/sql_hr?useSSL=false&amp;serverTimezone=UTC" />
+        <property name="username" value="dev" />
+        <property name="password" value="dev123" />
+        <!-- 连接池配置 -->
+        <property name="initialSize" value="5" />
+        <property name="maxActive" value="10" />
+        <property name="minIdle" value="5" />
+        <property name="maxWait" value="60000" />
+    </bean>
+
+
+    <!--  OrderDAO  -->
+    <bean id="orderDAO" class="com.kezhang.dao.OrderDAO">
+        <!-- 注入connection -->
+        <property name="connection" ref="connection" />
+    </bean>
+    <!--  Connection  -->
+    <bean id="connection" scope="prototype" lazy-init="true" class="java.sql.DriverManager" factory-method="getConnection">
+        <!-- 构造参数：URL / 用户名 / 密码 -->
+        <constructor-arg value="jdbc:mysql://localhost:3306/sql_hr?useSSL=false&amp;serverTimezone=UTC" />
+        <constructor-arg value="dev" />
+        <constructor-arg value="dev123" />
+    </bean>
+
+</beans>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  ToolA  -->
+    <bean id="toolA" class="com.kezhang.utils.factory.ToolAFactory" factory-method="createToolAWithArgs" >
+        <!-- 为工厂方法传递参数 -->
+        <constructor-arg value="VIP" />
+        <constructor-arg value="100" />
+    </bean>
+
+    <!--  ToolBFactory  -->
+    <bean id="toolBFactory" class="com.kezhang.utils.factory.ToolBFactory" />
+    <!--  ToolB  -->
+    <bean id="toolB" factory-bean="toolBFactory" factory-method="createToolBWithArgs">
+        <constructor-arg value="VIP" />
+        <constructor-arg value="200" />
+    </bean>
+
+    <!--  ToolC  -->
+    <bean id="toolC" class="com.kezhang.utils.factory.ToolCFactory">
+        <!-- 注入参数到FactoryBean -->
+        <constructor-arg value="exampleHost" />
+        <constructor-arg value="8080" />
+    </bean>
+
+</beans>

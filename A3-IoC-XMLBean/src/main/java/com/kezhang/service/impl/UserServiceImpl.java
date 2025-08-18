@@ -1,5 +1,6 @@
 package com.kezhang.service.impl;
 
+import com.kezhang.dao.OrderDAO;
 import com.kezhang.dao.UserDAO;
 import com.kezhang.service.UserService;
 import com.kezhang.utils.ToolA;
@@ -21,9 +22,14 @@ public class UserServiceImpl implements UserService, InitializingBean, Disposabl
     private ToolA toolA;
     private ToolB toolB;
     private ToolC toolC;
+    private OrderDAO orderDAO;
     public void setUserDAO(UserDAO userDAO){
         this.userDAO = userDAO;
         System.out.println("UserServiceImpl: UserDAO injected successfully.");
+    }
+    public void setOrderDAO(OrderDAO orderDAO){
+        this.orderDAO = orderDAO;
+        System.out.println("UserServiceImpl: OrderDAO injected successfully.");
     }
     public void setToolA(ToolA toolA){
         this.toolA = toolA;
@@ -58,6 +64,7 @@ public class UserServiceImpl implements UserService, InitializingBean, Disposabl
     @Override
     public void saveUser() {
         userDAO.insertUser();
+        orderDAO.insertOrder();
         toolA.toolA();
         toolB.toolB();
         toolC.toolC();

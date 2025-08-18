@@ -17,12 +17,26 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-    <!-- Spring Context（包含 ApplicationContext、BeanFactory 等） -->
+        <!-- Spring Context（包含 ApplicationContext、BeanFactory 等） -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>6.1.5</version>
         </dependency>
+        <!--  Mysql Connector  -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+        <!-- Druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.2.18</version>
+        </dependency>
+
     </dependencies>
+
 
 </project>

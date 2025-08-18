@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  UserController  -->
+    <bean id="userController" class="com.kezhang.controller.UserController"
+            scope="singleton" lazy-init="false" init-method="initUserController" destroy-method="destroyUserController">
+        <!-- 构造器承担实例化、依赖注入两个功能 -->
+        <constructor-arg ref="userServiceImpl" />
+    </bean>
+</beans>

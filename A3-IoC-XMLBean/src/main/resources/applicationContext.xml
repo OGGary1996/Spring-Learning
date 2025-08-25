@@ -8,6 +8,6 @@
     <import resource="applicationContext-Utils.xml"/>
     <import resource="applicationContext-Controller.xml"/>
     <import resource="applicationContext-DAO.xml"/>
-
+    <import resource="applicationContext-PostProcessor.xml"/>
 
 </beans>

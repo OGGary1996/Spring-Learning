@@ -1,6 +1,10 @@
 package com.kezhang.utils;
 
-public class ToolB {
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+
+public class ToolB implements BeanFactoryAware {
     private String type;
     private Integer level;
     // 无参构造器，用于无参工厂方法构建
@@ -10,6 +14,11 @@ public class ToolB {
     public ToolB(String Type,Integer level){
         this.type = Type;
         this.level = level;
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        System.out.println("BeanFactoryAware: BeanFactory is " + beanFactory.getClass().getName());
     }
 
     public void toolB(){

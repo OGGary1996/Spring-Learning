@@ -21,5 +21,4 @@ public class OrderDAO {
         // 模拟数据库插入操作
         System.out.println("OrderDAO: Inserting order with connection: " + connection);
     }
-
 }

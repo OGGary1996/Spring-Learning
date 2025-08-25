@@ -1,6 +1,10 @@
 package com.kezhang.utils;
 
-public class ToolC {
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+public class ToolC implements ApplicationContextAware {
     private String host;
     private Integer port;
     // 无参构造器，用于无参工厂方法构建
@@ -11,6 +15,11 @@ public class ToolC {
         this.host = host;
         this.port = port;
     };
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        System.out.println("ApplicationContextAware: ApplicationContext is " + applicationContext.getClass().getName());
+    }
 
     public void toolC() {
         // 模拟业务方法

@@ -1,6 +1,8 @@
 package com.kezhang.utils;
 
-public class ToolA {
+import org.springframework.beans.factory.BeanNameAware;
+
+public class ToolA implements BeanNameAware {
     private String type;
     private Integer level;
     // 无参构造器,用于无参工厂方法构建
@@ -13,6 +15,10 @@ public class ToolA {
         this.level = level;
     }
 
+    @Override
+    public void setBeanName(String name) {
+        System.out.println("BeanNameAware: Bean name is " + name);
+    }
 
     public void toolA() {
         System.out.println("Tool1: tool1 method called, " +

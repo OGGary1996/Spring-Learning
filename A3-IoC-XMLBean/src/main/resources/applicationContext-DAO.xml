@@ -32,9 +32,9 @@
     <!--  Connection  -->
     <bean id="connection" scope="prototype" lazy-init="true" class="java.sql.DriverManager" factory-method="getConnection">
         <!-- 构造参数：URL / 用户名 / 密码 -->
-        <constructor-arg value="jdbc:mysql://localhost:3306/sql_hr?useSSL=false&amp;serverTimezone=UTC" />
-        <constructor-arg value="dev" />
-        <constructor-arg value="dev123" />
+        <constructor-arg name="url" value="jdbc:mysql://localhost:3306/sql_hr?useSSL=false&amp;serverTimezone=UTC" />
+        <constructor-arg name="user" value="dev" />
+        <constructor-arg name="password" value="dev123" />
     </bean>
 
 </beans>

@@ -3,11 +3,93 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- 引入其他的xml -->
-    <import resource="applicationContext-Service.xml"/>
-    <import resource="applicationContext-Utils.xml"/>
-    <import resource="applicationContext-Controller.xml"/>
-    <import resource="applicationContext-DAO.xml"/>
-    <import resource="applicationContext-PostProcessor.xml"/>
+    <!--  UserDAO  -->
+    <bean id="userDAO" class="com.xmlbean.dao.UserDAO" name="dao1"
+          scope="singleton" lazy-init="false" init-method="initUserDAO" destroy-method="destroyUserDAO">
+        <!-- 注入druidDataSource -->
+        <property name="dataSource" ref="druidDataSource" />
+    </bean>
+    <!--  Druid  -->
+    <bean id="druidDataSource" scope="prototype" lazy-init="true" class="com.alibaba.druid.pool.DruidDataSource" >
+        <!-- 基本连接信息 -->
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/sql_hr?useSSL=false&amp;serverTimezone=UTC" />
+        <property name="username" value="dev" />
+        <property name="password" value="dev123" />
+        <!-- 连接池配置 -->
+        <property name="initialSize" value="5" />
+        <property name="maxActive" value="10" />
+        <property name="minIdle" value="5" />
+        <property name="maxWait" value="60000" />
+    </bean>
+
+
+    <!--  OrderDAO  -->
+    <bean id="orderDAO" class="com.xmlbean.dao.OrderDAO">
+        <!-- 注入connection -->
+        <property name="connection" ref="connection" />
+    </bean>
+    <!--  Connection  -->
+    <bean id="connection" scope="prototype" lazy-init="true" class="java.sql.DriverManager" factory-method="getConnection">
+        <!-- 构造参数：URL / 用户名 / 密码 -->
+        <constructor-arg name="url" value="jdbc:mysql://localhost:3306/sql_hr?useSSL=false&amp;serverTimezone=UTC" />
+        <constructor-arg name="user" value="dev" />
+        <constructor-arg name="password" value="dev123" />
+    </bean>
+
+
+    <!--  ToolA  -->
+    <bean id="toolA" class="com.xmlbean.utils.factory.ToolAFactory" factory-method="createToolAWithArgs" >
+        <!-- 为工厂方法传递参数 -->
+        <constructor-arg value="VIP" />
+        <constructor-arg value="100" />
+    </bean>
+
+    <!--  ToolBFactory  -->
+    <bean id="toolBFactory" class="com.xmlbean.utils.factory.ToolBFactory" />
+    <!--  ToolB  -->
+    <bean id="toolB" factory-bean="toolBFactory" factory-method="createToolBWithArgs">
+        <constructor-arg value="VIP" />
+        <constructor-arg value="200" />
+    </bean>
+
+    <!--  ToolC  -->
+    <bean id="toolC" class="com.xmlbean.utils.factory.ToolCFactory">
+        <!-- 注入参数到FactoryBean -->
+        <constructor-arg value="exampleHost" />
+        <constructor-arg value="8080" />
+    </bean>
+
+    <!--  UserService  -->
+    <bean id="userServiceImpl" class="com.xmlbean.service.impl.UserServiceImpl"
+          scope="singleton" lazy-init="false" init-method="initUserServiceImpl" destroy-method="destroyUserServiceImpl">
+        <!-- 默认采用无参数构造实例化 -->
+        <!-- setter依赖注入 -->
+        <property name="userDAO" ref="userDAO" />
+        <!-- 注入ToolA -->
+        <property name="toolA" ref="toolA" />
+        <!-- 注入ToolB -->
+        <property name="toolB" ref="toolB" />
+        <!-- 注入ToolC -->
+        <property name="toolC" ref="toolC" />
+    </bean>
+
+
+    <!--  UserController  -->
+    <bean id="userController" class="com.xmlbean.controller.UserController"
+            scope="singleton" lazy-init="false" init-method="initUserController" destroy-method="destroyUserController">
+        <!-- 构造器承担实例化、依赖注入两个功能 -->
+        <constructor-arg ref="userServiceImpl" />
+    </bean>
+
+
+
+    <!--  注册PostProcessor  -->
+    <bean class="com.xmlbean.postProcessor.CustomBeanDefinitionPostProcessor"/>
+    <bean class="com.xmlbean.postProcessor.AddBeanDefinitionPostProcessor"/>
+    <bean class="com.xmlbean.postProcessor.MyBeanPostProcessor"/>
+    <bean class="com.xmlbean.postProcessor.TimeLogBeanPostProcessor" />
+
+
 
 </beans>

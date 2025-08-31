@@ -4,11 +4,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!--  创建需要被注入的类 UserDAO  -->
-    <bean id="userDAO" class="com.kezhang.dao.UserDAO"/>
+    <bean id="userDAO" class="com.applicationContext.dao.UserDAO"/>
 
     <!--  创建主Bean，UserServiceImpl  -->
     <!--  property中配置注入的Bean,UserDAO  -->
-    <bean id="userServiceImpl" class="com.kezhang.service.impl.UserServiceImpl">
+    <bean id="userServiceImpl" class="com.applicationContext.service.impl.UserServiceImpl">
         <property name="userDAO" ref="userDAO"/>
     </bean>
 

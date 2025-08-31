@@ -12,6 +12,9 @@
         <module>A1-IoC-BeanFactory</module>
         <module>A2-IoC-ApplicationContext</module>
         <module>A3-IoC-XMLBean</module>
+        <module>A4-IoC-XMLMyBatis</module>
+        <module>A5-IoC-AnnotationBean</module>
+        <module>A6-IoC-AnnotationMyBatis</module>
     </modules>
 
     <properties>

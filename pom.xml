@@ -15,6 +15,10 @@
         <module>A4-IoC-XMLMyBatis</module>
         <module>A5-IoC-AnnotationBean</module>
         <module>A6-IoC-AnnotationMyBatis</module>
+        <module>B1-AOP-XML</module>
+        <module>B2-AOP-Annotation</module>
+        <module>B3-Transaction-XML</module>
+        <module>B4-Transaction-Annotation</module>
     </modules>
 
     <properties>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/tx
+         http://www.springframework.org/schema/tx/spring-tx.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 外部配置文件 -->
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <!-- MyBatis -->
+    <!-- 1. 数据源（示例：HikariCP） -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <property name="jdbcUrl" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="driverClassName" value="${db.driverClassName}"/>
+    </bean>
+    <!-- 2. SqlSessionFactory（Spring管理） -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configuration">
+            <bean class="org.apache.ibatis.session.Configuration">
+                <property name="mapUnderscoreToCamelCase" value="true"/>
+                <property name="cacheEnabled" value="true"/>
+            </bean>
+        </property>
+        <!-- 别名 与 Mapper XML 路径 -->
+        <property name="typeAliasesPackage" value="com.transactionXml.entity"/>
+        <property name="mapperLocations" value="classpath*:com/transactionXml/mapper/*.xml" />
+    </bean>
+
+    <!-- 3A. 扫描注册 Mapper（方式一：MapperScannerConfigurer） -->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.transactionXml"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!-- 3B. 扫描注册 Mapper（方式二：mybatis:scan，更直观） -->
+    <!-- <mybatis:scan base-package="com.example.mapper" sql-session-factory="sqlSessionFactory"/> -->
+
+
+    <!--  业务类  -->
+    <bean id="accountService" class="com.transactionXml.service.impl.AccountServiceImpl">
+        <property name="accountMapper" ref="accountMapper"/>
+    </bean>
+
+    <!-- 声明式事务控制 -->
+    <!-- 1. 添加TransactionManager 到 Spring   -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="txManager"/>
+    <!-- 2.配置tx作为Advice -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <!-- 读操作：尽量只读，利于优化（部分数据库会 hint readOnly） -->
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="list*" read-only="true" />
+            <tx:method name="count*" read-only="true" />
+            <!-- 写操作：常用 REQUIRED + READ_COMMITTED + 业务容错设定 -->
+            <tx:method name="save*" propagation="REQUIRED" isolation="READ_COMMITTED" timeout="30"/>
+            <tx:method name="update*" propagation="REQUIRED" isolation="READ_COMMITTED" timeout="30"/>
+            <tx:method name="delete*" propagation="REQUIRED" isolation="READ_COMMITTED" timeout="30"/>
+            <!-- 关键业务（例如转账）：指定回滚规则（默认只回滚 RuntimeException） -->
+            <tx:method name="transfer*" propagation="REQUIRED" isolation="READ_COMMITTED" timeout="30"
+                       rollback-for="java.lang.Exception"/>
+            <!-- 兜底规则：匹配剩余所有方法 -->
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+    <!-- 3. AOP切面，指定哪些类的方法需要事务控制 -->
+    <aop:config proxy-target-class="false">
+        <aop:pointcut id="serviceMethods" expression="execution(* com.transactionXml.service.impl..*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
+    </aop:config>
+
+
+</beans>

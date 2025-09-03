@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/aop
+            https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 业务类  -->
+    <bean id="userService" class="com.aopXml.service.impl.UserServiceImpl" />
+    <bean id="orderService" class="com.aopXml.service.impl.OrderServiceImpl" />
+    <!-- AOP类  -->
+    <bean id="logAspect" class="com.aopXml.com.aopAnnotation.aop.LogAspect"/>
+    <bean id="timeAspect" class="com.aopXml.aop.TimeAspect"/>
+
+    <!-- AOP 配置 -->
+    <aop:config proxy-target-class="false">
+        <!-- pointCut 拦截 service.impl 包下对应类的所有方法 -->
+        <aop:pointcut id="userServiceMethods" expression="execution(* com.aopXml.service.impl.UserServiceImpl.*(..))"/>
+        <aop:pointcut id="orderServiceMethods" expression="execution(* com.aopXml.service.impl.OrderServiceImpl.*(..))"/>
+        <!-- Aspect  -->
+        <aop:aspect id="logAspectDef" ref="logAspect">
+            <!-- advice -->
+            <!-- 环绕通知（优先演示它，因为能包住整个调用） -->
+            <aop:around method="around" pointcut-ref="userServiceMethods"/>
+            <!-- 前置通知 -->
+            <aop:before method="before" pointcut-ref="userServiceMethods"/>
+            <!-- 后置通知 -->
+            <aop:after-returning method="afterReturning" pointcut-ref="userServiceMethods" returning="result"/>
+            <aop:after-throwing method="afterThrowing" pointcut-ref="userServiceMethods" throwing="exception"/>
+            <aop:after method="after" pointcut-ref="userServiceMethods"/>
+        </aop:aspect>
+        <!-- Advisor -->
+        <!--<aop:advisor advice-ref="timeAspect" pointcut-ref="orderServiceMethods"/>-->
+
+    </aop:config>
+
+
+</beans>

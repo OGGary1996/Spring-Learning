@@ -19,6 +19,7 @@
         <module>B2-AOP-Annotation</module>
         <module>B3-Transaction-XML</module>
         <module>B4-Transaction-Annotation</module>
+        <module>C1-SpringWeb-XML</module>
     </modules>
 
     <properties>

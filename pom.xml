@@ -20,6 +20,7 @@
         <module>B3-Transaction-XML</module>
         <module>B4-Transaction-Annotation</module>
         <module>C1-SpringWeb-XML</module>
+        <module>D1-SpringMVC-XML</module>
     </modules>
 
     <properties>

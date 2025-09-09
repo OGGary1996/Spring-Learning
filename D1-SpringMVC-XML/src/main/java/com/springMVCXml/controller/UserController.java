@@ -14,8 +14,9 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public void addUser() {
+    public String addUser() {
         userService.addUser();
         System.out.println("UserController addUser ...");
+        return "hello";
     }
 }

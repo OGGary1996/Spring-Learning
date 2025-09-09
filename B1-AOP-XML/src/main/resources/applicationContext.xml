@@ -11,7 +11,7 @@
     <bean id="userService" class="com.aopXml.service.impl.UserServiceImpl" />
     <bean id="orderService" class="com.aopXml.service.impl.OrderServiceImpl" />
     <!-- AOP类  -->
-    <bean id="logAspect" class="com.aopXml.com.aopAnnotation.aop.LogAspect"/>
+    <bean id="logAspect" class="com.aopXml.aop.LogAspect"/>
     <bean id="timeAspect" class="com.aopXml.aop.TimeAspect"/>
 
     <!-- AOP 配置 -->

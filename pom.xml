@@ -21,6 +21,8 @@
         <module>B4-Transaction-Annotation</module>
         <module>C1-SpringWeb-XML</module>
         <module>D1-SpringMVC-XML</module>
+        <module>D2-SpringMVC-RequestResponse</module>
+        <module>D3-SpringMVC-FilterInterceptor</module>
     </modules>
 
     <properties>

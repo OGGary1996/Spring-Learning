@@ -23,6 +23,7 @@
         <module>D1-SpringMVC-XML</module>
         <module>D2-SpringMVC-RequestResponse</module>
         <module>D3-SpringMVC-FilterInterceptor</module>
+        <module>D4-SpringMVC-FullAnnotation</module>
     </modules>
 
     <properties>
